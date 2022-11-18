@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="btn-left">
+    <button class="btn btn-success my-5" type="button" data-toggle="modal" data-target="#addModal"
+      (click)="showModal(0, 'Agregar Alumno')">Agregar</button>
+  </div>
+
+  <div class="catalogo">
+    <h1 class="my-5">Catalogo de Alumnos</h1>
+    <h3 *ngIf="alumnos.length < 1" class="noResult">No hay alumnos registrados</h3>
+    <div class="cards">
+      <div class="card" *ngFor="let alumno of alumnos">
+        <img class="card-img-top img-profile" [src]="alumno.imagen" alt="Imagen Alumno"
+          onerror="this.src='assets/noimagen.jpg';">
+        <div class="card-body">
+          <h5 class="card-title">Nombre: {{alumno.nombre}} {{alumno.app1}} {{alumno.app2}}</h5>
+          <h6>Grado y Grupo: {{alumno.grado}} - {{alumno.grupo}}</h6>
+
+          <div *ngIf="alumno.estatus == 'A'">
+            <span class="badge badge-success">Activo</span>
+          </div>
+          <div *ngIf="alumno.estatus == 'B'">
+            <span class="badge badge-danger">Baja</span>
+          </div>
+          <div class="btn-options">
+            <button class="btn btn-light" (click)="showModal(1, 'Editar Alumno', alumno)" data-toggle="modal"
+              data-target="#addModal">Editar</button>
+            <button class="btn btn-danger" (click)="deleteStudent(alumno.id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{titleDescription}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="form" (ngSubmit)="postAlumno()">
+            <div *ngIf="optionModal == 0">
+              <div class="form-group">
+                <label for="name">Nombre</label>
+                <input formControlName="nombre" type="text" id="name" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="app1">Apellido Paterno</label>
+                <input type="text" id="app1" class="form-control" formControlName="app1">
+              </div>
+
+              <div class="form-group">
+                <label for="app2">Apellido Materno</label>
+                <input type="text" id="app2" class="form-control" formControlName="app2">
+              </div>
+
+              <div class="form-group">
+                <label for="grado">Grado</label>
+                <select name="grado" id="grado" class="form-control" formControlName="grado">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+
+
+              <div class="form-group">
+                <label for="grupo">Grupo</label>
+                <select name="grupo" id="grupo" class="form-control" formControlName="grupo">
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <label for="imagen">URL de Imagen</label>
+              <input id="imagen" type="text" class="form-control" formControlName="imagen">
+            </div>
+            <div class="form-group" *ngIf="optionModal == 1">
+              <label for="imagen">Estatus</label>
+              <select name="estatus" id="grupo" class="form-control" formControlName="estatus">
+                <option value="A">ALTA</option>
+                <option value="B">BAJA</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" *ngIf="optionModal == 0"
+                [disabled]="form.invalid">Agregar</button>
+              <button type="button" class="btn btn-primary" *ngIf="optionModal == 1"
+                (click)="updateAlumno()">Actualizar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<footer>
+  <h4>CRUD Web Angular + .NET - Desarrollado por : Jesus Corral</h4>
+</footer>
